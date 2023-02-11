@@ -16,21 +16,44 @@ function App() {
       isComplete: true,
     },
     {
-      id: 1,
+      id: 3,
       title: "Do other thing",
       isComplete: false,
     },
   ]);
 
+  const [todoInput, setTodoInput] = useState("");
+
+  function addTodo(event) {
+    event.preventDefault();
+
+    if (todoInput.trim().length === 0) return;
+
+    setTodos([
+      ...todos,
+      {
+        id: Date.now(),
+        title: todoInput,
+        isComplete: false,
+      },
+    ]);
+
+    setTodoInput("");
+  }
+
+  const getTodoInput = (event) => setTodoInput(event.target.value);
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
         <h2>Todo App</h2>
-        <form action="#">
+        <form action="#" onSubmit={addTodo}>
           <input
             type="text"
             className="todo-input"
             placeholder="What do you need to do?"
+            value={todoInput}
+            onChange={getTodoInput}
           />
         </form>
 
