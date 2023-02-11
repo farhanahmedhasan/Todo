@@ -45,6 +45,15 @@ function App() {
 
     const getTodoInput = (event) => setTodoInput(event.target.value);
 
+    const checkTodo = (id) => {
+        const updatedTodos = todos.map((todo) => {
+            if (todo.id === id) todo.isComplete = !todo.isComplete;
+            return todo;
+        });
+
+        setTodos(updatedTodos);
+    };
+
     return (
         <div className="todo-app-container">
             <div className="todo-app">
@@ -63,7 +72,11 @@ function App() {
                     {todos.map((todo) => (
                         <li key={todo.id} className="todo-item-container">
                             <div className="todo-item">
-                                <input type="checkbox" />
+                                <input
+                                    type="checkbox"
+                                    checked={todo.isComplete}
+                                    onChange={() => checkTodo(todo.id)}
+                                />
                                 <span
                                     className={`todo-item-label ${
                                         todo.isComplete ? "line-through" : ""
