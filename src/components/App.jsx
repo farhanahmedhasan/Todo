@@ -9,16 +9,19 @@ function App() {
             id: 1,
             title: "Finish React Series",
             isComplete: false,
+            isEditing: false,
         },
         {
             id: 2,
             title: "Go to Grocery",
             isComplete: true,
+            isEditing: false,
         },
         {
             id: 3,
             title: "Do other thing",
             isComplete: false,
+            isEditing: false,
         },
     ]);
 
@@ -35,6 +38,7 @@ function App() {
                 id: Date.now(),
                 title: todoInput,
                 isComplete: false,
+                isEditing: false,
             },
         ]);
 
@@ -46,13 +50,50 @@ function App() {
     const getTodoInput = (event) => setTodoInput(event.target.value);
 
     const checkTodo = (id) => {
-        const updatedTodos = todos.map((todo) => {
+        const checkedTodos = todos.map((todo) => {
             if (todo.id === id) todo.isComplete = !todo.isComplete;
             return todo;
         });
 
-        setTodos(updatedTodos);
+        setTodos(checkedTodos);
     };
+
+    const markAsEditing = (id) => {
+        const eiditingTodos = todos.map((todo) => {
+            if (todo.id === id) todo.isEditing = !todo.isEditing;
+            return todo;
+        });
+
+        setTodos(eiditingTodos);
+    };
+
+    function updateTodo(event, id) {
+        const updatedTodos = todos.map((todo) => {
+            if (event.target.value.trim().length === 0) {
+                todo.isEditing = false;
+                return todo;
+            }
+
+            if (todo.id === id) {
+                todo.title = event.target.value;
+                todo.isEditing = false;
+            }
+
+            return todo;
+        });
+
+        setTodos(updatedTodos);
+    }
+
+    function handleKeyPress(event, id) {
+        if (event.key === "Enter") {
+            updateTodo(event, id);
+        }
+
+        if (event.key === "Escape") {
+            markAsEditing(id);
+        }
+    }
 
     return (
         <div className="todo-app-container">
@@ -77,14 +118,26 @@ function App() {
                                     checked={todo.isComplete}
                                     onChange={() => checkTodo(todo.id)}
                                 />
-                                <span
-                                    className={`todo-item-label ${
-                                        todo.isComplete ? "line-through" : ""
-                                    }`}
-                                >
-                                    {todo.title}
-                                </span>
-                                {/* <input type="text" className="todo-item-input" value="Go to Grocery" /> */}
+
+                                {!todo.isEditing ? (
+                                    <span
+                                        onDoubleClick={() => markAsEditing(todo.id)}
+                                        className={`todo-item-label ${
+                                            todo.isComplete ? "line-through" : ""
+                                        }`}
+                                    >
+                                        {todo.title}
+                                    </span>
+                                ) : (
+                                    <input
+                                        type="text"
+                                        className="todo-item-input"
+                                        autoFocus
+                                        defaultValue={todo.title}
+                                        onBlur={(event) => updateTodo(event, todo.id)}
+                                        onKeyDown={(event) => handleKeyPress(event, todo.id)}
+                                    />
+                                )}
                             </div>
                             <button className="x-button" onClick={() => deleteTodo(todo.id)}>
                                 <svg
