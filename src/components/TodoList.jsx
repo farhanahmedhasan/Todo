@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import TodoItemsRemaining from "./TodoItemsRemaining";
 import TodoClearCompleted from "./TodoClearCompleted";
+import CompleteAllTodos from "./CompleteAllTodos";
 
-function TodoList({ todos, setTodos, remainingItems, clearCompleted }) {
+function TodoList({ todos, setTodos, remainingItems, clearCompleted, completeAllTodos }) {
     const checkTodo = (id) => {
         const checkedTodos = todos.map((todo) => {
             if (todo.id === id) todo.isComplete = !todo.isComplete;
@@ -105,7 +107,7 @@ function TodoList({ todos, setTodos, remainingItems, clearCompleted }) {
 
             <div className="check-all-container">
                 <div>
-                    <div className="button">Check All</div>
+                    <CompleteAllTodos completeAllTodos={completeAllTodos} />
                 </div>
 
                 <TodoItemsRemaining remainingItems={remainingItems} />
@@ -130,6 +132,7 @@ TodoList.propTypes = {
     setTodos: PropTypes.func.isRequired,
     remainingItems: PropTypes.func.isRequired,
     clearCompleted: PropTypes.func.isRequired,
+    completeAllTodos: PropTypes.func.isRequired,
 };
 
 export default TodoList;

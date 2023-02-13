@@ -45,6 +45,17 @@ function App() {
 
     const clearCompleted = () => setTodos([...todos].filter((todo) => !todo.isComplete));
 
+    const completeAllTodos = () => {
+        if (todos.length < 1) return;
+
+        const completeAllTodos = todos.map((todo) => {
+            todo.isComplete = true;
+            return todo;
+        });
+
+        setTodos(completeAllTodos);
+    };
+
     return (
         <div className="todo-app-container">
             <div className="todo-app">
@@ -58,6 +69,7 @@ function App() {
                         setTodos={setTodos}
                         remainingItems={remainingItems}
                         clearCompleted={clearCompleted}
+                        completeAllTodos={completeAllTodos}
                     />
                 )}
 
