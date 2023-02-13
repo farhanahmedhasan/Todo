@@ -41,6 +41,10 @@ function App() {
         ]);
     }
 
+    const remainingItems = () => todos.filter((todo) => !todo.isComplete).length;
+
+    const clearCompleted = () => setTodos([...todos].filter((todo) => !todo.isComplete));
+
     return (
         <div className="todo-app-container">
             <div className="todo-app">
@@ -48,7 +52,14 @@ function App() {
 
                 <TodoForm addTodo={addTodo} />
 
-                {todos.length > 0 && <TodoList todos={todos} setTodos={setTodos} />}
+                {todos.length > 0 && (
+                    <TodoList
+                        todos={todos}
+                        setTodos={setTodos}
+                        remainingItems={remainingItems}
+                        clearCompleted={clearCompleted}
+                    />
+                )}
 
                 {todos.length < 1 && <NoTodos />}
             </div>
