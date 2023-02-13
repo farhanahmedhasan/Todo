@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function CompleteAllTodos({ completeAllTodos }) {
+function TodoCompleteAll({ completeAllTodos }) {
     return (
         <div onClick={completeAllTodos} className="button">
             Check All
@@ -9,8 +9,8 @@ function CompleteAllTodos({ completeAllTodos }) {
     );
 }
 
-CompleteAllTodos.propTypes = {
+TodoCompleteAll.propTypes = {
     completeAllTodos: PropTypes.func.isRequired,
 };
 
-export default CompleteAllTodos;
+export default TodoCompleteAll;

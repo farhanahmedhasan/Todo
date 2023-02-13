@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import TodoItemsRemaining from "./TodoItemsRemaining";
 import TodoClearCompleted from "./TodoClearCompleted";
-import CompleteAllTodos from "./CompleteAllTodos";
+import TodoCompleteAll from "./TodoCompleteAll";
+import TodoFilters from "./TodoFilters";
 
-function TodoList({ todos, setTodos, remainingItems, clearCompleted, completeAllTodos }) {
+function TodoList({
+    todos,
+    setTodos,
+    remainingItems,
+    clearCompleted,
+    completeAllTodos,
+    filteredTodos,
+}) {
+    const [filter, setFilter] = useState("all");
+
     const checkTodo = (id) => {
         const checkedTodos = todos.map((todo) => {
             if (todo.id === id) todo.isComplete = !todo.isComplete;
@@ -57,7 +67,7 @@ function TodoList({ todos, setTodos, remainingItems, clearCompleted, completeAll
     return (
         <>
             <ul className="todo-list">
-                {todos.map((todo) => (
+                {filteredTodos(filter).map((todo) => (
                     <li key={todo.id} className="todo-item-container">
                         <div className="todo-item">
                             <input
@@ -106,19 +116,13 @@ function TodoList({ todos, setTodos, remainingItems, clearCompleted, completeAll
             </ul>
 
             <div className="check-all-container">
-                <div>
-                    <CompleteAllTodos completeAllTodos={completeAllTodos} />
-                </div>
+                <TodoCompleteAll completeAllTodos={completeAllTodos} />
 
                 <TodoItemsRemaining remainingItems={remainingItems} />
             </div>
 
             <div className="other-buttons-container">
-                <div>
-                    <button className="button filter-button filter-button-active">All</button>
-                    <button className="button filter-button">Active</button>
-                    <button className="button filter-button">Completed</button>
-                </div>
+                <TodoFilters filter={filter} setFilter={setFilter} />
                 <div>
                     <TodoClearCompleted clearCompleted={clearCompleted} />
                 </div>
@@ -133,6 +137,7 @@ TodoList.propTypes = {
     remainingItems: PropTypes.func.isRequired,
     clearCompleted: PropTypes.func.isRequired,
     completeAllTodos: PropTypes.func.isRequired,
+    filteredTodos: PropTypes.func.isRequired,
 };
 
 export default TodoList;
