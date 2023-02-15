@@ -134,7 +134,7 @@ function TodoList({
 TodoList.propTypes = {
     todos: PropTypes.array.isRequired,
     setTodos: PropTypes.func.isRequired,
-    remainingItems: PropTypes.func.isRequired,
+    remainingItems: PropTypes.number.isRequired,
     clearCompleted: PropTypes.func.isRequired,
     completeAllTodos: PropTypes.func.isRequired,
     filteredTodos: PropTypes.func.isRequired,

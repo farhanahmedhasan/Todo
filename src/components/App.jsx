@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 import "../App.css";
 import "../reset.css";
@@ -8,6 +8,9 @@ import NoTodos from "./NoTodos";
 import TodoList from "./TodoList";
 
 function App() {
+    const [name, setName] = useState("");
+    const nameInputEl = useRef(null);
+
     const [todos, setTodos] = useState([
         {
             id: 1,
@@ -29,6 +32,11 @@ function App() {
         },
     ]);
 
+    function changeName(event) {
+        event.preventDefault();
+        setName(event.target.value);
+    }
+
     function addTodo(todoInput) {
         setTodos([
             ...todos,
@@ -41,7 +49,13 @@ function App() {
         ]);
     }
 
-    const remainingItems = () => todos.filter((todo) => !todo.isComplete).length;
+    const remainingItemsCalculation = () => {
+        // console.log("Calculating Remaining todos. I am slowish");
+        // for (let index = 0; index < 2000000000; index++) {}
+        return todos.filter((todo) => !todo.isComplete).length;
+    };
+
+    const remainingItems = useMemo(remainingItemsCalculation, [todos]);
 
     const clearCompleted = () => setTodos([...todos].filter((todo) => !todo.isComplete));
 
@@ -70,9 +84,30 @@ function App() {
         }
     };
 
+    useEffect(() => {
+        nameInputEl.current.focus();
+    }, []);
+
     return (
         <div className="todo-app-container">
             <div className="todo-app">
+                <div className="name-container">
+                    <h2>What is your name ?</h2>
+
+                    <form action="#">
+                        <input
+                            type="text"
+                            className="todo-input"
+                            placeholder="what is your name ?"
+                            ref={nameInputEl}
+                            value={name}
+                            onChange={changeName}
+                        />
+                    </form>
+
+                    {name && <p className="name-label">Hello {name}</p>}
+                </div>
+
                 <h2>Todo App</h2>
 
                 <TodoForm addTodo={addTodo} />
