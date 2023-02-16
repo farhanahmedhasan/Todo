@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import "../App.css";
 import "../reset.css";
@@ -9,10 +9,10 @@ import TodoList from "./TodoList";
 
 import useLocalStorage from "../hooks/useLocalStorage";
 
-function App() {
-    const [name, setName] = useLocalStorage("name", "");
-    const nameInputEl = useRef(null);
+import { TodosContext } from "../context/TodosContext";
+import TodoUserName from "./TodoUserName";
 
+function App() {
     const [todos, setTodos] = useLocalStorage("todos", [
         {
             id: 1,
@@ -21,18 +21,6 @@ function App() {
             isEditing: false,
         },
     ]);
-
-    function addTodo(todoInput) {
-        setTodos([
-            ...todos,
-            {
-                id: Date.now(),
-                title: todoInput,
-                isComplete: false,
-                isEditing: false,
-            },
-        ]);
-    }
 
     const remainingItemsCalculation = () => {
         // console.log("Calculating Remaining todos. I am slowish");
@@ -69,54 +57,31 @@ function App() {
         }
     };
 
-    useEffect(() => {
-        nameInputEl.current.focus();
-    }, []);
-
-    const handleNameInput = (event) => setName(event.target.value);
-
     return (
-        <div className="todo-app-container">
-            <div className="todo-app">
-                <div className="name-container">
-                    <h2>What is your name ?</h2>
+        <TodosContext.Provider value={{ todos, setTodos }}>
+            <div className="todo-app-container">
+                <div className="todo-app">
+                    <TodoUserName />
 
-                    <form action="#">
-                        <input
-                            type="text"
-                            className="todo-input"
-                            placeholder="what is your name ?"
-                            ref={nameInputEl}
-                            value={name}
-                            onChange={handleNameInput}
+                    <h2>Todo App</h2>
+
+                    <TodoForm />
+
+                    {todos.length > 0 && (
+                        <TodoList
+                            todos={todos}
+                            setTodos={setTodos}
+                            remainingItems={remainingItems}
+                            clearCompleted={clearCompleted}
+                            completeAllTodos={completeAllTodos}
+                            filteredTodos={filteredTodos}
                         />
-                    </form>
-
-                    {name && (
-                        <p className="name-label">
-                            Hello <span>{name}</span>
-                        </p>
                     )}
+
+                    {todos.length < 1 && <NoTodos />}
                 </div>
-
-                <h2>Todo App</h2>
-
-                <TodoForm addTodo={addTodo} />
-
-                {todos.length > 0 && (
-                    <TodoList
-                        todos={todos}
-                        setTodos={setTodos}
-                        remainingItems={remainingItems}
-                        clearCompleted={clearCompleted}
-                        completeAllTodos={completeAllTodos}
-                        filteredTodos={filteredTodos}
-                    />
-                )}
-
-                {todos.length < 1 && <NoTodos />}
             </div>
-        </div>
+        </TodosContext.Provider>
     );
 }
 

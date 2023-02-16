@@ -1,22 +1,33 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 
-function TodoForm({ addTodo }) {
+import { TodosContext } from "../context/TodosContext";
+
+function TodoForm() {
+    const { todos, setTodos } = useContext(TodosContext);
     const [todoInput, setTodoInput] = useState("");
+
     const getTodoInput = (event) => setTodoInput(event.target.value);
 
-    function handleSubmit(event) {
+    function addTodo(event) {
         event.preventDefault();
 
         if (todoInput.trim().length === 0) return;
 
-        addTodo(todoInput);
+        setTodos([
+            ...todos,
+            {
+                id: Date.now(),
+                title: todoInput,
+                isComplete: false,
+                isEditing: false,
+            },
+        ]);
 
         setTodoInput("");
     }
 
     return (
-        <form action="#" onSubmit={handleSubmit}>
+        <form action="#" onSubmit={addTodo}>
             <input
                 type="text"
                 className="todo-input"
@@ -27,9 +38,5 @@ function TodoForm({ addTodo }) {
         </form>
     );
 }
-
-TodoForm.propTypes = {
-    addTodo: PropTypes.func.isRequired,
-};
 
 export default TodoForm;
