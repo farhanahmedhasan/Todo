@@ -2,9 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function TodoFilters({ filter, setFilter }) {
-    function getValue(event) {
-        setFilter(event.target.value);
-    }
+    const getValue = (event) => setFilter(event.target.value);
 
     return (
         <div>

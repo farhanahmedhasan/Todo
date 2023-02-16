@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useContext, useState } from "react";
 
 import TodoItemsRemaining from "./TodoItemsRemaining";
 import TodoClearCompleted from "./TodoClearCompleted";
@@ -7,19 +6,29 @@ import TodoCompleteAll from "./TodoCompleteAll";
 import TodoFilters from "./TodoFilters";
 
 import useToggle from "../hooks/useToggle";
+import { TodosContext } from "../context/TodosContext";
 
-function TodoList({
-    todos,
-    setTodos,
-    remainingItems,
-    clearCompleted,
-    completeAllTodos,
-    filteredTodos,
-}) {
+function TodoList() {
+    const { todos, setTodos } = useContext(TodosContext);
+
     const [filter, setFilter] = useState("all");
 
     const [isFeatureOneVisible, setIsFeatureOneVisible] = useToggle();
     const [isFeatureTwoVisible, setIsFeatureTwoVisible] = useToggle();
+
+    const filteredTodos = (filter) => {
+        if (filter === "all") {
+            return todos;
+        }
+
+        if (filter === "active") {
+            return todos.filter((todo) => !todo.isComplete);
+        }
+
+        if (filter === "completed") {
+            return todos.filter((todo) => todo.isComplete);
+        }
+    };
 
     const checkTodo = (id) => {
         const checkedTodos = todos.map((todo) => {
@@ -131,9 +140,9 @@ function TodoList({
 
             {isFeatureOneVisible && (
                 <div className="check-all-container">
-                    <TodoCompleteAll completeAllTodos={completeAllTodos} />
+                    <TodoCompleteAll />
 
-                    <TodoItemsRemaining remainingItems={remainingItems} />
+                    <TodoItemsRemaining />
                 </div>
             )}
 
@@ -141,21 +150,12 @@ function TodoList({
                 <div className="other-buttons-container">
                     <TodoFilters filter={filter} setFilter={setFilter} />
                     <div>
-                        <TodoClearCompleted clearCompleted={clearCompleted} />
+                        <TodoClearCompleted />
                     </div>
                 </div>
             )}
         </>
     );
 }
-
-TodoList.propTypes = {
-    todos: PropTypes.array.isRequired,
-    setTodos: PropTypes.func.isRequired,
-    remainingItems: PropTypes.number.isRequired,
-    clearCompleted: PropTypes.func.isRequired,
-    completeAllTodos: PropTypes.func.isRequired,
-    filteredTodos: PropTypes.func.isRequired,
-};
 
 export default TodoList;
