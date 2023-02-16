@@ -7,26 +7,16 @@ import TodoForm from "./TodoForm";
 import NoTodos from "./NoTodos";
 import TodoList from "./TodoList";
 
+import useLocalStorage from "../hooks/useLocalStorage";
+
 function App() {
-    const [name, setName] = useState("");
+    const [name, setName] = useLocalStorage("name", "");
     const nameInputEl = useRef(null);
 
-    const [todos, setTodos] = useState([
+    const [todos, setTodos] = useLocalStorage("todos", [
         {
             id: 1,
-            title: "Finish React Series",
-            isComplete: false,
-            isEditing: false,
-        },
-        {
-            id: 2,
-            title: "Go to Grocery",
-            isComplete: true,
-            isEditing: false,
-        },
-        {
-            id: 3,
-            title: "Do other thing",
+            title: "Just an example Todo Delete me ?",
             isComplete: false,
             isEditing: false,
         },
@@ -81,13 +71,9 @@ function App() {
 
     useEffect(() => {
         nameInputEl.current.focus();
-        setName(JSON.parse(localStorage.getItem("name")) ?? "");
     }, []);
 
-    function handleNameInput(event) {
-        setName(event.target.value);
-        localStorage.setItem("name", JSON.stringify(event.target.value));
-    }
+    const handleNameInput = (event) => setName(event.target.value);
 
     return (
         <div className="todo-app-container">
@@ -106,7 +92,11 @@ function App() {
                         />
                     </form>
 
-                    {name && <p className="name-label">Hello {name}</p>}
+                    {name && (
+                        <p className="name-label">
+                            Hello <span>{name}</span>
+                        </p>
+                    )}
                 </div>
 
                 <h2>Todo App</h2>

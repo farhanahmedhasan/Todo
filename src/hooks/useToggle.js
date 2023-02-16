@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function useToggle(initialState = true) {
     const [visible, setVisible] = useState(initialState);

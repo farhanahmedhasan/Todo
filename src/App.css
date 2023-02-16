@@ -155,6 +155,10 @@ h2 {
     margin-top: 15px;
 }
 
+.name-label span {
+    font-weight: bold;
+}
+
 .toggles-container {
     display: flex;
     justify-content: space-evenly;
