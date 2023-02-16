@@ -32,11 +32,6 @@ function App() {
         },
     ]);
 
-    function changeName(event) {
-        event.preventDefault();
-        setName(event.target.value);
-    }
-
     function addTodo(todoInput) {
         setTodos([
             ...todos,
@@ -86,7 +81,13 @@ function App() {
 
     useEffect(() => {
         nameInputEl.current.focus();
+        setName(JSON.parse(localStorage.getItem("name")) ?? "");
     }, []);
+
+    function handleNameInput(event) {
+        setName(event.target.value);
+        localStorage.setItem("name", JSON.stringify(event.target.value));
+    }
 
     return (
         <div className="todo-app-container">
@@ -101,7 +102,7 @@ function App() {
                             placeholder="what is your name ?"
                             ref={nameInputEl}
                             value={name}
-                            onChange={changeName}
+                            onChange={handleNameInput}
                         />
                     </form>
 
