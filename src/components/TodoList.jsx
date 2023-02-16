@@ -6,6 +6,8 @@ import TodoClearCompleted from "./TodoClearCompleted";
 import TodoCompleteAll from "./TodoCompleteAll";
 import TodoFilters from "./TodoFilters";
 
+import useToggle from "../hooks/useToggle";
+
 function TodoList({
     todos,
     setTodos,
@@ -15,6 +17,9 @@ function TodoList({
     filteredTodos,
 }) {
     const [filter, setFilter] = useState("all");
+
+    const [isFeatureOneVisible, setIsFeatureOneVisible] = useToggle();
+    const [isFeatureTwoVisible, setIsFeatureTwoVisible] = useToggle();
 
     const checkTodo = (id) => {
         const checkedTodos = todos.map((todo) => {
@@ -115,18 +120,31 @@ function TodoList({
                 ))}
             </ul>
 
-            <div className="check-all-container">
-                <TodoCompleteAll completeAllTodos={completeAllTodos} />
-
-                <TodoItemsRemaining remainingItems={remainingItems} />
-            </div>
-
-            <div className="other-buttons-container">
-                <TodoFilters filter={filter} setFilter={setFilter} />
-                <div>
-                    <TodoClearCompleted clearCompleted={clearCompleted} />
+            <div className="toggles-container">
+                <div onClick={setIsFeatureOneVisible} className="button">
+                    Features One Toggle
+                </div>
+                <div onClick={setIsFeatureTwoVisible} className="button">
+                    Features Two Toggle
                 </div>
             </div>
+
+            {isFeatureOneVisible && (
+                <div className="check-all-container">
+                    <TodoCompleteAll completeAllTodos={completeAllTodos} />
+
+                    <TodoItemsRemaining remainingItems={remainingItems} />
+                </div>
+            )}
+
+            {isFeatureTwoVisible && (
+                <div className="other-buttons-container">
+                    <TodoFilters filter={filter} setFilter={setFilter} />
+                    <div>
+                        <TodoClearCompleted clearCompleted={clearCompleted} />
+                    </div>
+                </div>
+            )}
         </>
     );
 }

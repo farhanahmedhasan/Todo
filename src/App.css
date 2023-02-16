@@ -154,3 +154,9 @@ h2 {
 .name-container .name-label {
     margin-top: 15px;
 }
+
+.toggles-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px 0;
+}
