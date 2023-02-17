@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import useLocalStorage from "../hooks/useLocalStorage";
 

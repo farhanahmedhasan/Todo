@@ -24,25 +24,23 @@ function App() {
 
     return (
         <TodosContext.Provider value={{ todos, setTodos }}>
-            <div className="todo-app-container">
-                <div className="todo-app">
-                    <TodoUserName />
+            <div className="todo-app">
+                <TodoUserName />
 
-                    <h2>Todo App</h2>
+                <h2>Todo App</h2>
 
-                    <TodoForm />
+                <TodoForm />
 
-                    <SwitchTransition mode="out-in">
-                        <CSSTransition
-                            key={todos.length > 0}
-                            timeout={300}
-                            classNames="slide-vertical"
-                            unmountOnExit
-                        >
-                            {todos.length > 0 ? <TodoList /> : <NoTodos />}
-                        </CSSTransition>
-                    </SwitchTransition>
-                </div>
+                <SwitchTransition mode="out-in">
+                    <CSSTransition
+                        key={todos.length > 0}
+                        timeout={300}
+                        classNames="slide-vertical"
+                        unmountOnExit
+                    >
+                        {todos.length > 0 ? <TodoList /> : <NoTodos />}
+                    </CSSTransition>
+                </SwitchTransition>
             </div>
         </TodosContext.Provider>
     );
