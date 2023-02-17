@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import "../App.css";
 import "../reset.css";
@@ -32,11 +32,16 @@ function App() {
 
                     <TodoForm />
 
-                    {todos.length > 0 && (
-                        <TodoList />
-                    )}
-
-                    {todos.length < 1 && <NoTodos />}
+                    <SwitchTransition mode="out-in">
+                        <CSSTransition
+                            key={todos.length > 0}
+                            timeout={300}
+                            classNames="slide-vertical"
+                            unmountOnExit
+                        >
+                            {todos.length > 0 ? <TodoList /> : <NoTodos />}
+                        </CSSTransition>
+                    </SwitchTransition>
                 </div>
             </div>
         </TodosContext.Provider>

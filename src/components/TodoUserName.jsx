@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function TodoUserName() {
@@ -26,11 +27,16 @@ function TodoUserName() {
                 />
             </form>
 
-            {name && (
+            <CSSTransition
+                in={name.length > 0}
+                timeout={300}
+                classNames="slide-horizontal"
+                unmountOnExit
+            >
                 <p className="name-label">
                     Hello <span>{name}</span>
                 </p>
-            )}
+            </CSSTransition>
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import TodoItemsRemaining from "./TodoItemsRemaining";
 import TodoClearCompleted from "./TodoClearCompleted";
@@ -80,54 +81,56 @@ function TodoList() {
 
     return (
         <>
-            <ul className="todo-list">
+            <TransitionGroup className="todo-list" component="ul">
                 {filteredTodos(filter).map((todo) => (
-                    <li key={todo.id} className="todo-item-container">
-                        <div className="todo-item">
-                            <input
-                                type="checkbox"
-                                checked={todo.isComplete}
-                                onChange={() => checkTodo(todo.id)}
-                            />
-
-                            {!todo.isEditing ? (
-                                <span
-                                    onDoubleClick={() => markAsEditing(todo.id)}
-                                    className={`todo-item-label ${
-                                        todo.isComplete ? "line-through" : ""
-                                    }`}
-                                >
-                                    {todo.title}
-                                </span>
-                            ) : (
+                    <CSSTransition key={todo.id} timeout={300} classNames="slide-horizontal">
+                        <li className="todo-item-container">
+                            <div className="todo-item">
                                 <input
-                                    type="text"
-                                    className="todo-item-input"
-                                    autoFocus
-                                    defaultValue={todo.title}
-                                    onBlur={(event) => updateTodo(event, todo.id)}
-                                    onKeyDown={(event) => handleKeyPress(event, todo.id)}
+                                    type="checkbox"
+                                    checked={todo.isComplete}
+                                    onChange={() => checkTodo(todo.id)}
                                 />
-                            )}
-                        </div>
-                        <button className="x-button" onClick={() => deleteTodo(todo.id)}>
-                            <svg
-                                className="x-button-icon"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                    </li>
+
+                                {!todo.isEditing ? (
+                                    <span
+                                        onDoubleClick={() => markAsEditing(todo.id)}
+                                        className={`todo-item-label ${
+                                            todo.isComplete ? "line-through" : ""
+                                        }`}
+                                    >
+                                        {todo.title}
+                                    </span>
+                                ) : (
+                                    <input
+                                        type="text"
+                                        className="todo-item-input"
+                                        autoFocus
+                                        defaultValue={todo.title}
+                                        onBlur={(event) => updateTodo(event, todo.id)}
+                                        onKeyDown={(event) => handleKeyPress(event, todo.id)}
+                                    />
+                                )}
+                            </div>
+                            <button className="x-button" onClick={() => deleteTodo(todo.id)}>
+                                <svg
+                                    className="x-button-icon"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </li>
+                    </CSSTransition>
                 ))}
-            </ul>
+            </TransitionGroup>
 
             <div className="toggles-container">
                 <div onClick={setIsFeatureOneVisible} className="button">
@@ -138,22 +141,32 @@ function TodoList() {
                 </div>
             </div>
 
-            {isFeatureOneVisible && (
+            <CSSTransition
+                in={isFeatureOneVisible}
+                timeout={300}
+                classNames="slide-vertical"
+                unmountOnExit
+            >
                 <div className="check-all-container">
                     <TodoCompleteAll />
 
                     <TodoItemsRemaining />
                 </div>
-            )}
+            </CSSTransition>
 
-            {isFeatureTwoVisible && (
+            <CSSTransition
+                in={isFeatureTwoVisible}
+                timeout={300}
+                classNames="slide-vertical"
+                unmountOnExit
+            >
                 <div className="other-buttons-container">
                     <TodoFilters filter={filter} setFilter={setFilter} />
                     <div>
                         <TodoClearCompleted />
                     </div>
                 </div>
-            )}
+            </CSSTransition>
         </>
     );
 }
