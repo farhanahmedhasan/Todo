@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import TodoItemsRemaining from "./TodoItemsRemaining";
@@ -7,10 +7,14 @@ import TodoCompleteAll from "./TodoCompleteAll";
 import TodoFilters from "./TodoFilters";
 
 import useToggle from "../hooks/useToggle";
-import { TodosContext } from "../context/TodosContext";
+import { useTodosStore } from "../stores/TodoStore";
 
 function TodoList() {
-    const { todos, setTodos } = useContext(TodosContext);
+    const todos = useTodosStore((state) => state.todos);
+    const deleteTodo = useTodosStore((state) => state.deleteTodo);
+    const updateTodo = useTodosStore((state) => state.updateTodo);
+    const markAsEditing = useTodosStore((state) => state.markAsEditing);
+    const checkTodo = useTodosStore((state) => state.checkTodo);
 
     const [filter, setFilter] = useState("all");
 
@@ -31,42 +35,6 @@ function TodoList() {
         }
     };
 
-    const checkTodo = (id) => {
-        const checkedTodos = todos.map((todo) => {
-            if (todo.id === id) todo.isComplete = !todo.isComplete;
-            return todo;
-        });
-
-        setTodos(checkedTodos);
-    };
-
-    const markAsEditing = (id) => {
-        const eiditingTodos = todos.map((todo) => {
-            if (todo.id === id) todo.isEditing = !todo.isEditing;
-            return todo;
-        });
-
-        setTodos(eiditingTodos);
-    };
-
-    function updateTodo(event, id) {
-        const updatedTodos = todos.map((todo) => {
-            if (event.target.value.trim().length === 0) {
-                todo.isEditing = false;
-                return todo;
-            }
-
-            if (todo.id === id) {
-                todo.title = event.target.value;
-                todo.isEditing = false;
-            }
-
-            return todo;
-        });
-
-        setTodos(updatedTodos);
-    }
-
     function handleKeyPress(event, id) {
         if (event.key === "Enter") {
             updateTodo(event, id);
@@ -76,8 +44,6 @@ function TodoList() {
             markAsEditing(id);
         }
     }
-
-    const deleteTodo = (id) => setTodos([...todos].filter((todo) => todo.id != id));
 
     return (
         <>

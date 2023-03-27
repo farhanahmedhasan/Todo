@@ -1,22 +1,17 @@
-import React, { useContext } from "react";
-import { TodosContext } from "../context/TodosContext";
+import React from "react";
+import { useTodosStore } from "../stores/TodoStore";
 
 function TodoCompleteAll() {
-    const { todos, setTodos } = useContext(TodosContext);
+    const todos = useTodosStore((state) => state.todos);
+    const completeAllTodos = useTodosStore((state) => state.completeAllTodos);
 
-    const completeAllTodos = () => {
+    const handleCompleteAllTodos = () => {
         if (todos.length < 1) return;
-
-        const completeAllTodos = todos.map((todo) => {
-            todo.isComplete = true;
-            return todo;
-        });
-
-        setTodos(completeAllTodos);
+        completeAllTodos();
     };
 
     return (
-        <div onClick={completeAllTodos} className="button">
+        <div onClick={handleCompleteAllTodos} className="button">
             Check All
         </div>
     );

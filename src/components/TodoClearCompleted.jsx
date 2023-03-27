@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import { TodosContext } from "../context/TodosContext";
+import { useTodosStore } from "../stores/TodoStore";
 
 function TodoClearCompleted() {
-    const { todos, setTodos } = useContext(TodosContext);
-
-    const clearCompleted = () => setTodos([...todos].filter((todo) => !todo.isComplete));
+    const clearCompleted = useTodosStore((state) => state.clearCompleted);
 
     return (
         <button onClick={clearCompleted} className="button">

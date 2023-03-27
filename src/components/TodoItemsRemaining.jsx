@@ -1,12 +1,10 @@
-import React, { useContext, useMemo } from "react";
-import { TodosContext } from "../context/TodosContext";
+import React, { useMemo } from "react";
+import { useTodosStore } from "../stores/TodoStore";
 
 function TodoItemsRemaining() {
-    const { todos } = useContext(TodosContext);
+    const todos = useTodosStore((state) => state.todos);
 
     const remainingItemsCalculation = () => {
-        // console.log("Calculating Remaining todos. I am slowish");
-        // for (let index = 0; index < 2000000000; index++) {}
         return todos.filter((todo) => !todo.isComplete).length;
     };
 
